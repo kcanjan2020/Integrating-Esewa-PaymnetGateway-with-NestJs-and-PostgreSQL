@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: anjan
+      POSTGRES_PASSWORD: anjan
+      POSTGRES_DB: esewa_payment
+    volumes:
+      - esewa_payment:/var/lib/postgresql/data
+  
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+
+
+volumes:
+  esewa_payment:
+    driver: local

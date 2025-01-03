@@ -21,7 +21,10 @@ export class Product {
   @Column({ type: 'bigint' })
   price: number;
 
-  @Column()
+  @Column({ type: 'bigint', nullable: true })
+  product_delivery_charge: number;
+
+  @Column({ nullable: true })
   discountPercentage: number;
 
   @Column({ type: 'bigint' })

@@ -1,4 +1,7 @@
 {
+  "dependencies": {
+    "@nestjs/mapped-types": "*"
+  },
   "name": "esewa-payment-gateway",
   "private": true,
   "scripts": {

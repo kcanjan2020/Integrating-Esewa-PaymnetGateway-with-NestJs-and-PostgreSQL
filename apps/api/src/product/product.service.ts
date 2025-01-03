@@ -15,23 +15,18 @@ export class ProductService {
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
     private readonly cloudinaryService: CloudinaryService,
-  ) {
-    // const databaseUrl = this.configService.get('DATABASE_URL');
-    // this.sql = neon(databaseUrl);
-  }
+  ) {}
   async create(createProductDto: CreateProductDto, image: Express.Multer.File) {
     const product = new Product();
     product.title = createProductDto.title;
     product.description = createProductDto.description;
     product.price = createProductDto.price;
     product.discountPercentage = createProductDto.discountPercentage;
+    product.product_delivery_charge = createProductDto.product_delivery_charge;
     product.stock = createProductDto.stock;
     product.category = createProductDto.category;
     product.brand = createProductDto.brand;
     product.status = createProductDto.status;
-
-    console.log('image', image);
-
     if (image) {
       try {
         const fileName = await this.cloudinaryService.uploadFile(
@@ -40,8 +35,6 @@ export class ProductService {
         );
         product.image = fileName as string;
       } catch (error) {
-        console.log('error', error);
-
         throw new InternalServerErrorException('Failed to save image');
       }
     }

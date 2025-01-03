@@ -24,6 +24,11 @@ export class CreateProductDto {
   @IsNotEmpty()
   @IsNumber()
   @Transform((v) => Number(v.value))
+  product_delivery_charge: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Transform((v) => Number(v.value))
   stock: number;
 
   @IsString()
