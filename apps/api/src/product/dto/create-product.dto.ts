@@ -1,11 +1,17 @@
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import e from 'express';
 
 export class CreateProductDto {
   @IsString()
   @IsNotEmpty()
-  title: string;
+  productName: string;
 
   @IsString()
   @IsNotEmpty()
@@ -16,15 +22,20 @@ export class CreateProductDto {
   @Transform((v) => Number(v.value))
   price: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   @Transform((v) => Number(v.value))
   discountPercentage: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   @Transform((v) => Number(v.value))
-  product_delivery_charge: number;
+  productDeliveryCharge: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Transform((v) => Number(v.value))
+  productServiceCharge: number;
 
   @IsNotEmpty()
   @IsNumber()
@@ -40,18 +51,4 @@ export class CreateProductDto {
   brand: string;
 
   image?: any;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  @Transform((v) => {
-    if (typeof v.value === 'string') {
-      if (v.value === 'false') {
-        return false;
-      } else if (v.value === 'true') {
-        return true;
-      }
-    }
-    return Boolean(v.value);
-  })
-  status: boolean;
 }

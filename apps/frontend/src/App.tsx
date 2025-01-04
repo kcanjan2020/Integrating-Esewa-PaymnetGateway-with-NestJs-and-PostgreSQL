@@ -1,35 +1,74 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import axios from "axios";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const handlePayment = async (payment_method: string) => {
+    const url = "http://localhost:3000/order-item";
+    const data = {
+      productId: "KUEYU2367890",
+      purchaseDate: "2014-12-01",
+      productName: "Smartphone11",
+      price: 500,
+      quantity: 23,
+      discountPercentage: 10,
+      productDeliveryCharge: 10,
+      productServiceCharge: 10,
+      taxAmount: 10,
+      totalPrice: 530,
+      paymentMethod: payment_method,
+      status: "pending",
+    };
+    try {
+      const response = await axios({
+        method: "post",
+        url: url,
+        data: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response) {
+        const responseData = await response.data;
+        if (responseData.paymentMethod === "esewa") {
+          esewaCall(responseData.esewaFormData);
+        }
+      } else {
+        console.error("Failed to fetch:");
+      }
+    } catch (error) {
+      console.error("Error during fetch:", error);
+    }
+  };
+  const esewaCall = (formData: any) => {
+    var path = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
 
+    var form = document.createElement("form");
+    form.setAttribute("method", "POST");
+    form.setAttribute("action", path);
+    form.setAttribute("target", "_blank");
+
+    for (var key in formData) {
+      var hiddenField = document.createElement("input");
+      hiddenField.setAttribute("type", "hidden");
+      hiddenField.setAttribute("name", key);
+      hiddenField.setAttribute("value", formData[key]);
+      form.appendChild(hiddenField);
+    }
+    document.body.appendChild(form);
+    form.submit();
+  };
   return (
     <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <h1>Integrating Esewa Paymnet Gateway with NestJs and PostgreSQL</h1>
+        <img
+          src="https://esewa.com.np/common/images/esewa_logo.png"
+          alt="Esewa Payment"
+          style={{ cursor: "pointer", margin: 10 }}
+          onClick={() => handlePayment("esewa")}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
-
-export default App
+export default App;

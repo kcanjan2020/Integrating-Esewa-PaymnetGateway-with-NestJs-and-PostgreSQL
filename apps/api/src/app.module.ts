@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ProductModule } from './product/product.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PurchaseItemModule } from './purchase-item/purchase-item.module';
-import { PaymentModule } from './payment/payment.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { OrderItemModule } from './order-item/order-item.module';
+import { PaymentMethodsModule } from './payment-method/payment-methods.module';
+import { PaymentTransactionDetailsModule } from './payment-transaction-details/payment-transaction-details.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -28,14 +29,14 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
           database: configService.get('DB_NAME'),
           autoLoadEntities: true,
           synchronize: true,
-          logging: true,
         };
       },
       inject: [ConfigService],
     }),
-    PurchaseItemModule,
-    PaymentModule,
     CloudinaryModule,
+    OrderItemModule,
+    PaymentTransactionDetailsModule,
+    PaymentMethodsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

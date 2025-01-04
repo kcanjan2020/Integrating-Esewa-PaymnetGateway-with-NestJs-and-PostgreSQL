@@ -1,5 +1,4 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { Repository } from 'typeorm';
@@ -18,15 +17,20 @@ export class ProductService {
   ) {}
   async create(createProductDto: CreateProductDto, image: Express.Multer.File) {
     const product = new Product();
-    product.title = createProductDto.title;
+    product.productName = createProductDto.productName;
     product.description = createProductDto.description;
     product.price = createProductDto.price;
     product.discountPercentage = createProductDto.discountPercentage;
-    product.product_delivery_charge = createProductDto.product_delivery_charge;
+    product.productDeliveryCharge = createProductDto.productDeliveryCharge;
+    product.productServiceCharge = createProductDto.productServiceCharge;
+    product.totalPrice =
+      createProductDto.price +
+      createProductDto.productDeliveryCharge +
+      createProductDto.productServiceCharge -
+      createProductDto.price * (createProductDto.discountPercentage / 100);
     product.stock = createProductDto.stock;
     product.category = createProductDto.category;
     product.brand = createProductDto.brand;
-    product.status = createProductDto.status;
     if (image) {
       try {
         const fileName = await this.cloudinaryService.uploadFile(

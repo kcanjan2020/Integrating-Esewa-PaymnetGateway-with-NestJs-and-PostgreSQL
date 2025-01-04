@@ -13,19 +13,25 @@ export class Product {
   id: number;
 
   @Column()
-  title: string;
+  productName: string;
 
   @Column({ type: 'text' })
   description: string;
 
-  @Column({ type: 'bigint' })
+  @Column('bigint')
   price: number;
-
-  @Column({ type: 'bigint', nullable: true })
-  product_delivery_charge: number;
 
   @Column({ nullable: true })
   discountPercentage: number;
+
+  @Column({ type: 'bigint', nullable: true })
+  productDeliveryCharge: number;
+
+  @Column({ nullable: true })
+  productServiceCharge: number;
+
+  @Column({ type: 'bigint' })
+  totalPrice: number;
 
   @Column({ type: 'bigint' })
   stock: number;
@@ -38,9 +44,6 @@ export class Product {
 
   @Column()
   image: string;
-
-  @Column()
-  status: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
