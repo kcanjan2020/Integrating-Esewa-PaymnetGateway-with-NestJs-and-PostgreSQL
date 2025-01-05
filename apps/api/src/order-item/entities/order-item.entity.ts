@@ -1,6 +1,7 @@
 import { PaymentMethod } from 'src/constants/payment.method';
 import { PaymentStatus } from 'src/constants/payment.status';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { PaymentTransactionDetail } from 'src/payment-transaction-details/entities/payment-transaction-detail.entity';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class OrderItem {
@@ -42,4 +43,10 @@ export class OrderItem {
 
   @Column({ default: PaymentStatus.PENDING })
   status: PaymentStatus;
+
+  @OneToOne(
+    () => PaymentTransactionDetail,
+    (paymentTransactionDetail) => paymentTransactionDetail.productId,
+  )
+  paymentTransactionDetail: PaymentTransactionDetail;
 }
